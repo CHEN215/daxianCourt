@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>备份管理</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+	<script type="text/javascript" src="__JS__/function.js"></script>
+	<body>
+		<div class="admin-main">
+
+
+			<fieldset class="layui-elem-field">
+				<legend>备份列表</legend>
+				<div class="layui-field-box">
+					<table class="site-table table-hover">
+						<thead>
+							<tr>
+								<th>备份名称</th>
+								<th>卷数</th>
+								<th>压缩</th>
+								<th>数据大小</th>
+								<th>备份时间</th>
+								<th>还原</th>
+								<th>删除</th>
+							</tr>
+						</thead>
+						<tbody>
+						    <foreach name="backups" item="backup">
+								<tr>
+									<td>{$backup['name']}</td>
+									<td>{$backup['part']}</td>
+									<td>{$backup['compress']}</td>
+									<td><script type="text/javascript">format_bytes({$backup['size']})</script></td>
+									<td>{$backup['time']}</td>
+									<td>
+										<a href="javascript:;"  data-name="{$backup['name']}" class="layui-btn layui-btn-mini edit_btn">还原数据</a>
+									</td>
+									<td>
+									
+										<a href="javascript:;" data-name="{$backup['name']}" class="layui-btn layui-btn-danger layui-btn-mini del_btn">删除</a>
+									</td>
+								</tr>
+						    </foreach>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+
+		</div>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+   
+		
+
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use('layer', function() {
+
+				var $ = layui.jquery,
+					laypage = layui.laypage,
+					layer = parent.layer === undefined ? layui.layer : parent.layer;
+
+				
+				// 恢复
+				$('.edit_btn').on('click', function() {
+					var name = $(this).data('name');  // 获取data-name属性的值 
+					
+					$.post('{:U("Backup/import")}',{'name':name}, success,"json");
+ 
+				    function success(data){
+				        if(data.success){
+				        	//提示信息
+				        	layer.msg(data.msg);
+
+				             if(data.part){
+				                $.post('{:U("Backup/import")}', 
+				                    {'name':name,"part" : data.part, "start" : data.start}, 
+				                    success, 
+				                    "json"
+				                );
+				            } 
+				        } else {
+				        	$.messager.alert('错误',data.msg,'error');
+
+
+				        }
+				    }
+				});
+
+				// 删除备份
+				$('.del_btn').on('click', function() {
+					var name = $(this).data('name');  // 获取data-name属性的值 = 
+					
+					layer.confirm('确定删除备份？', function(index){
+						// do something
+						$.post(
+							'{:U("Backup/del")}',
+							 {'name':name},
+							 function(result){
+								if(result.success){
+									layer.msg('删除成功！',function(){
+										window.location.reload();
+									});
+								}else{
+									layer.msg('删除失败！',function(){
+										return;
+									});
+								}
+							}
+						);
+						
+					}); 
+				});
+
+
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>友情链接管理</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;"  data-id='' class="layui-btn layui-btn-small" id="add">
+					<i class="layui-icon">&#xe608;</i>添加友情链接
+				</a>
+			</blockquote>
+
+			<fieldset class="layui-elem-field">
+				<legend>友情链接列表</legend>
+				<div class="layui-field-box">
+					<table class="site-table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>站点名称</th>
+								<th>类型</th>
+								<th>地址</th>
+								<th>编辑</th>
+								<th>删除</th>
+							</tr>
+						</thead>
+						<tbody>
+							<foreach name="links" item="link">
+								<tr>
+									<td>{++$key}</td>
+									<td>{$link['name']}</td>
+									<td style="text-align:center;">
+									    <if condition="$link['type'] eq '1'">
+											省市法院
+									    <else/>
+									    	基层法院
+									    </if>
+									</td>
+									<td>{$link['address']}</td>
+									<td>
+										<a href="javascript:;"  data-id="{$link['id']}" class="layui-btn layui-btn-mini edit_btn">编辑</a>
+									</td>
+									<td>
+										<a href="javascript:;" data-id="{$link['id']}" class="layui-btn layui-btn-danger layui-btn-mini del_btn">删除</a>
+									</td>
+								</tr>
+							</foreach>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+
+		</div>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use('layer', function() {
+
+				var $ = layui.jquery,
+					laypage = layui.laypage,
+					layer = parent.layer === undefined ? layui.layer : parent.layer;
+
+				// 添加友情链接
+				$('#add').on('click', function() {
+					var index =	layer.open({
+						type: 2,
+						title: '添加链接',
+						content: '{:U("Friendlink/add")}',
+						area: ['600px', '400px'],
+						maxmin: true,
+						end:function(){location.reload()}
+					});
+				});
+
+				// 编辑友情链接
+				$('.edit_btn').on('click', function() {
+					var id = $(this).data('id');  // 获取data-id属性的值 = 友情链接id
+					var index =	layer.open({
+						type: 2,
+						title: '编辑链接',
+						content: '{:U("Friendlink/edit")}?id='+id,
+						area: ['600px', '400px'],
+						maxmin: true,
+						end:function(){location.reload()}
+					});
+				});
+
+				// 删除友情链接
+				$('.del_btn').on('click', function() {
+					var id = $(this).data('id');  // 获取data-id属性的值 = 友情链接id
+					layer.confirm('确定删除链接？', function(index){
+						// do something
+						$.ajax({
+							type: 'DELETE',
+							url: '{:U("Friendlink/delete")}?id=' + id,
+							success: function(data){
+								if(data.success){
+									layer.msg('删除成功！',function(){
+										window.location.reload();
+									});
+								}else{
+									layer.msg('删除失败！',function(){
+										window.location.reload();
+									});
+								}
+							},
+							error: function(){
+								layer.msg('删除失败！',function(){
+									window.location.reload();
+								});
+							}
+						});
+					}); 
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

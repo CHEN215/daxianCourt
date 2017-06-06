@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加文章</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+
+		<form class="layui-form layui-form-pane" style="padding: 30px 50px;">
+		
+			<div class="layui-form-item">
+				<label class="layui-form-label">文章标题：</label>
+				<div class="layui-input-block">
+					<input type="text" name="title" value="" placeholder="请输入文章标题" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">所属栏目：</label>
+				<div class="layui-input-inline">
+					<select name="catetory" lay-verify="required">
+						<option value="" selected>请选择</option>
+						<foreach name="cates" item="cate">
+							<option value="{$cate['id']}">{$cate['name']}</option>
+					    </foreach>
+					</select>
+				</div>
+				
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">作者：</label>
+				<div class="layui-input-inline" style="width: 120px;">
+					<input type="text" name="author" value="信息部" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+				<label class="layui-form-label">来源：</label>
+				<div class="layui-input-inline" style="width: 120px;">
+					<input type="text" name="origin" value="本站" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">缩略图：</label>
+				<div class="layui-input-inline">
+					<input type="file" name="newsPic" class="layui-upload-file">
+				</div>
+				<div id="thumbimg" class="layui-form-mid layui-word-aux">
+					
+				</div>
+			</div>
+			<!-- 选择领导 -->
+			<div  class="layui-form-item">
+			    <label class="layui-form-label">领导审核：</label>
+			    <div class="layui-input-inline">
+					<select id='parent_catetory' name="leader" lay-filter="role" lay-verify="required">
+						<option value="">请选择审核的领导</option>
+						<foreach name="leaders" item="leader">
+							<option value="{$leader['id']}">{$leader['name']}</option>
+						</foreach>
+					</select>
+			    </div>
+			</div>
+			<!-- <div class="layui-form-item">
+				<label class="layui-form-label">外网显示：</label>
+				<div class="layui-input-block">
+					<input type="checkbox" name="isShowOutNet" title="发布" checked="checked">
+				</div>
+			</div> -->
+			<div class="layui-form-item">
+				<textarea id="article_content" class="layui-textarea layui-hide" name="content" lay-verify="content"></textarea>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="*">保存</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+
+		</form>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use(['form','jquery', 'layedit', 'laydate','upload'], function() {
+				var form = layui.form(),
+					layer = layui.layer,
+					$ = layui.jquery ,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+
+				layedit.set({
+					  uploadImage: {
+					    url: '{:U("Article/editimage")}' //接口url
+					    ,type: 'post' //默认post
+					  }
+					});
+				//创建一个富文本编辑器
+				var editIndex = layedit.build('article_content');
+
+				//自定义验证规则
+				form.verify({
+					content: function(value) {
+						layedit.sync(editIndex);
+					}
+				});
+
+				//更新子栏目
+				form.on('select(topcates)', function(data){
+					  $.get('{:U("Article/catelist")}?id='+data.value,function(result){
+						  if(result.success){
+							  $('#pcatetory').html(result.msg);
+							  form.render('select'); //刷新select选择框渲染
+						  }else{
+						  	 $('#pcatetory').remove();
+						  }
+					  }); 
+				});
+				//文件上传
+				layui.upload({
+					url: '{:U("Article/uploadThumb")}',
+					success: function(res,index){
+						if(res.success){
+							$img = '<img src="__ROOT__/Uploads'+res.url+'">';
+							$img += '<input type="hidden" name="thumb_src" value="'+res.url+'">';
+							$('#thumbimg').html($img);	
+						}else{
+							layer.msg('上传失败');
+						}
+					}
+				});
+
+				//监听提交
+				form.on('submit(*)', function(data) {
+					$.post('{:U("Article/add",array("ajax"=>1))}',data.field,function(result){
+						if(result.success){
+							layer.msg('添加成功！',function(){
+								// 获取iframe弹窗并关闭
+								window.location.reload();
+							});
+						}else{
+							layer.msg(result.msg);
+						}
+					});
+					return false; // 阻止表单提交
+				});
+			});
+
+		</script>
+	</body>
+
+</html>
+
+

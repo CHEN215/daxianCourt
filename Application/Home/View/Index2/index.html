@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>达州市统计信息网</title>
+	<link rel="stylesheet" href="__CSS__/reset.css">
+    <link rel="stylesheet" href="__CSS__/style.css">
+</head>
+
+<body>
+	<!--[if lt IE 7]>
+        <p class="browsehappy">您正在使用<strong>过时的</strong>浏览器。请<a href="http://browsehappy.com/">升级浏览器</a>以保证正常浏览！</p>
+    <![endif]-->
+    
+    <div class="site-bg"><img src="__IMAGE__/bg.jpg" alt=""></div>
+    
+    <!-- HEADER -->
+    <div class="header">
+        <div class="container clearfix">
+			<h1 class="logo"><a href="list.html"><img src="__IMAGE__/logo.png" alt="达州市统计信息网"></a></h1>
+			<p class="tip-link">
+				<!-- <a href="">旧网链接</a> |  -->
+				<a class="wecat-btn" href="javascript:;">微信平台</a>
+				<!-- |<a calss="map-btn" href="javascript:;">在线统计&gt;&gt;</a> -->
+				<div class="QRCode">
+					<i class="triangle"></i>
+					<img src="__IMAGE__/qord.png" alt="">
+				</div>
+			</p>
+			<ul class="nav clearfix">
+				
+				<li class="nav-item"><a href="{:U('Index/index')}">首页</a></li>
+				 
+				<foreach name="cates" item="cate">
+					<li class="nav-item"><a href="{:U('Index/alist',array('id'=>$cate['id']))}">{$cate['name']}</a></li>
+				</foreach>
+				
+			</ul>
+        </div>
+    </div> <!-- .header -->
+
+    <div class="nav-section">
+    	<div class="container clearfix">
+    		<div class="fl clearfix">
+	    		<!-- 工作动态 -->
+    			<div class="banner-container">
+					<ul class="news-list">
+					 <foreach name="articles" item="article">
+						<li class="news-item">
+							<a  href="{:U('Index/article',array('id'=>$article['id']))}">
+								<img class="news-pic"  src="__ROOT__/Uploads{$article['imgsrc']}" alt="">
+								<em class='news-title text_overflow'>
+								 	{$article['title']}
+								</em>
+							</a>
+						</li>
+					</foreach>
+					</ul>
+					<a class="prev-btn" href="javascript:void(0);"><img src="__IMAGE__/prev-btn.png" alt=""></a>
+					<a class="next-btn" href="javascript:void(0);"><img src="__IMAGE__/next-btn.png" alt=""></a>
+				</div>
+
+				<div>
+					<!-- 在线统计 -->
+					<div class="nav-lg-block nav-lg-block-hover" style="background: url('__IMAGE__/bg3.png');">
+						<a href="javascript:;">
+							<img src="__IMAGE__/icon-search.png" alt="">
+							<em class="nav-title">在线统计</em>
+						</a>
+						<div class="sub-nav">
+							<a href="http://219.235.129.78/dr/queryLoginInfo.do" target="_blank" style="padding: 20px;">
+								国家统计联网直报平台
+							</a>
+							<a href="http://www.stats.gov.cn/tjfw/tjzyjszgks/ksxx/" target="_blank" style="padding: 20px;">
+								统计专业技术资格信息查询
+							</a>
+						</div>
+					</div>
+					<!-- 政务公开 -->
+					{:W('Cate/cate',array('id'=>3,'color'=>'nav-lg-block nav-lg-block-hover','bg'=>'bg4.png','icon'=>'icon-zwgk.png'))}
+					
+				</div>
+
+    		</div>
+
+    		<div class="fr">
+    			<div>
+	    			<!-- 文件通知 -->
+					
+					{:W('cate/topcate',array('id'=>1,'bg'=>'bg1.png','icon'=>'icon-notice.png','class'=>'nav-lg-block'))}
+					
+					<!-- 数据发布 -->
+					
+					{:W('cate/topcate',array('id'=>42,'bg'=>'bg5.png','icon'=>'icon-send.png','class'=>'nav-sm-block'))}
+					
+				</div>
+				<div>
+					<!-- 工作动态 -->
+					
+					{:W('cate/topcate',array('id'=>62,'bg'=>'bg2.png','icon'=>'icon-news.png','class'=>'nav-lg-block'))}
+					
+					<!-- 数据解读 -->
+					
+					{:W('cate/topcate',array('id'=>6,'bg'=>'bg6.png','icon'=>'icon-jiedu.png','class'=>'nav-sm-block'))}
+					
+				</div>
+				<div>
+					<!-- 达州概况 -->
+					<div class="nav-lg-block" style="background: url('__IMAGE__/city_bg.png');">
+						<a href="{:U('Index/alist',array('id'=>31))}"><em class="nav-title" style='right: 95px;'>达州概况</em></a>
+					</div>
+					
+					<!-- 统计法制 -->
+					{:W('cate/topcate',array('id'=>32,'bg'=>'bg7.png','icon'=>'icon-law.png','class'=>'nav-sm-block'))}
+					
+				</div>
+    		</div>
+
+    	</div>
+    </div>
+
+    <div class="footer">
+    	<p>主办：达州市统计局 维护：达州市统计局网络中心 技术支持：深圳市千合科技有限公司 </p>
+		<p>地址：中国四川达州市永兴路2号市政中心9楼 电话：0818-2181832 邮政编码：635000 管理ICP备案编号：蜀ICP备09020326 </p>
+    </div>
+
+	<script src="__JS__/jquery-1.8.3.min.js"></script>
+	<script src="__JS__/layer/layer.js"></script>
+	<script src="__JS__/layer/layer.js"></script>
+	<script src="__JS__/layer/layer.js"></script>
+    <script>
+    	$(function(){
+			$.fn.bannerPlayer = function(){
+				var _this = $(this);
+				var _itemNum = $('.banner-container .news-list li').length; // 轮播数
+				var _index = _itemNum; // 初始项
+				var _time = 3000; // 切换间隔
+				var move = function(){				
+					if (_index == _itemNum*2+1) {
+						_this.find('.news-list').css({
+							"left" : '-' + (608 *_itemNum) + "px"
+						});
+						_index = _itemNum+1; 
+					}
+					if (_index == _itemNum-2){
+						_this.find('.news-list').css({
+							"left" : "-" + 608 * (_itemNum*2-1) + "px"
+						});
+						_index = _itemNum*2-2;
+					}
+					_this.find('.news-list').stop().animate({
+						"left" : "-" + _index * 608 + "px"
+					},600);
+				}; 
+
+				_this.find('.news-list').html(
+					_this.find('.news-list').html() 
+					+ _this.find('.news-list').html()
+					+ _this.find('.news-list').html()
+				).css({
+					"left" : "-" + 608 * _itemNum + "px"
+				});
+
+				var palyerTimer = setInterval(function(){
+					_index += 1;
+					move();
+				},_time);
+
+				_this.hover(function(){
+					clearInterval(palyerTimer);
+				},function(){
+					palyerTimer = setInterval(function(){
+						_index += 1;
+						move();
+					},_time);
+				});
+
+				$('.prev-btn').click(function(){
+					_index--;
+					move();
+				});
+				
+				$('.next-btn').click(function(){
+					_index++;
+					move();
+				});
+			};
+			$('.banner-container').bannerPlayer();
+
+			$(".wecat-btn").hover(function() {
+				$(".QRCode").css({
+					"top": "50px",
+					"opacity": "1"
+				});
+			}, function() {
+				$(".QRCode").css({
+					"top": "80px",
+					"opacity": "0"
+				});
+			});
+		});
+		
+		(function(){
+			$(".QRCode").css({
+				"top": "80px",
+				"opacity": "0"
+			});
+
+			if(document.body.clientHeight >780){
+				$(".footer").addClass("footer-fixed");
+			}
+			$(window).resize(function() {
+				if(document.body.clientHeight >780){
+					$(".footer").addClass("footer-fixed");
+				}else{
+					$(".footer").removeClass("footer-fixed");
+				}
+			});
+
+		})();
+    </script>
+
+</body>
+</html>

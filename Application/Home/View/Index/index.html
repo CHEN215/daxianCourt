@@ -1,0 +1,125 @@
+<meta charset="UTF-8">
+	{:W('Common/header')}
+
+	<div class="container clearfix">
+		<div class="slider fl">
+			<div class="slider-container">
+				<ul class="slider-list">
+				    <!-- 轮播图 -->
+				     <foreach name="articles" item="article">
+						<li class="slider-item">
+							<a href="{:U('Index/article',array('id'=>$article['id']))}">
+								<img class="news-pic"  src="__ROOT__/Uploads{$article['imgsrc']}" alt="">
+								<div class="news-content">
+									<h3 class='news-title text-overflow'>{$article['title']}</h3>
+									<div class="mark"></div>						
+								</div>
+							</a>
+						</li>
+					</foreach>
+				    <!-- /轮播图 -->
+				</ul>
+			</div>
+			<ul class="slider-btn">
+				<li class="btn-item active"></li>
+				<li class="btn-item"></li>
+				<li class="btn-item"></li>
+				<li class="btn-item"></li>
+			</ul>
+		</div>
+		<div class="news fr clearfix">
+			<h3 class="news-type">{$newsName['name']}</h3>
+			<dl class="first-news">
+				<dt class="first-news-title"><a href="{:U('Index/article',array('id'=>$onenews['id']))}">{$onenews['title']}</a></dt>
+				<dd class="first-news-desc">
+					<a href="{:U('Index/article',array('id'=>$onenews['id']))}">{:strip_tags_substr($onenews['comment'], 0, 80)}...</a>
+					<a href="{:U('Index/article',array('id'=>$onenews['id']))}" class="first-news-detail">[详细]</a>
+				</dd>
+			</dl>
+			<ul class="hot-news">
+			    <foreach name="news" item="new">
+			    	<li class="hot-news-item clearfix">
+						<a href="{:U('Index/article',array('id'=>$new['id']))}" class="hot-news-title">{$new['title']}</a>
+						<span class="hot-news-date">{:date('m-d',$new['time'])}</span>
+					</li>
+			    </foreach>
+
+			</ul>
+		</div>
+	</div>
+
+	<a class="court-banner container clearfix" href="javascript:;" title="达川区人民法院"></a>
+
+	<div class="container clearfix">
+		<a href="http://wenshu.court.gov.cn/List/List?sorttype=1&conditions=searchWord+%E8%BE%BE%E5%B7%9E%E5%B8%82%E8%BE%BE%E5%B7%9D%E5%8C%BA%E4%BA%BA%E6%B0%91%E6%B3%95%E9%99%A2+++%E5%9F%BA%E5%B1%82%E6%B3%95%E9%99%A2:%E8%BE%BE%E5%B7%9E%E5%B8%82%E8%BE%BE%E5%B7%9D%E5%8C%BA%E4%BA%BA%E6%B0%91%E6%B3%95%E9%99%A2">
+			<dl class="nav-block nav-block-1">
+				<dt class="nav-block-icon icon-1"></dt>
+				<dd class="nav-block-title">裁判文书</dd>
+			</dl>
+		</a>
+		<a href="http://pzh.sccourt.gov.cn/webapp/area/scsfgk/sfgk/sfgk-main.jsp?nav=01">
+			<dl class="nav-block nav-block-2">
+				<dt class="nav-block-icon icon-2"></dt>
+				<dd class="nav-block-title">审判流程</dd>
+			</dl>
+		</a>
+		<a href="http://pzh.sccourt.gov.cn/webapp/area/scsfgk/sfgk/sfgk-main.jsp?nav=03">
+			<dl class="nav-block nav-block-3">
+				<dt class="nav-block-icon icon-3"></dt>
+				<dd class="nav-block-title">执行信息</dd>
+			</dl>
+		</a>
+		<a href="http://pzh.sccourt.gov.cn/webapp/area/scsfgk/index.jsp">
+			<dl class="nav-block nav-block-4">
+				<dt class="nav-block-icon icon-4"></dt>
+				<dd class="nav-block-title">诉讼服务</dd>
+			</dl>
+		</a>
+		<a href="http://tingshen.court.gov.cn/court/3117">
+			<dl class="nav-block nav-block-5">
+				<dt class="nav-block-icon icon-5"></dt>
+				<dd class="nav-block-title">庭审直播</dd>
+			</dl>
+		</a>
+		<a href="http://zxgk.sccourt.gov.cn/webapp/area/scsfgk/ssfw/yd/wsla/wsla_index.jsp">
+			<dl class="nav-block nav-block-6">
+				<dt class="nav-block-icon icon-6"></dt>
+				<dd class="nav-block-title">网上立案</dd>
+			</dl>
+		</a>
+		<a href="{:U('Index/alist',array('id'=>66))}">
+			<dl class="nav-block nav-block-7">
+				<dt class="nav-block-icon icon-7"></dt>
+				<dd class="nav-block-title">诉讼指南</dd>
+			</dl>
+		</a>
+		<a href="{:U('Index/alist',array('id'=>67))}">
+			<dl class="nav-block nav-block-8 last-element">
+				<dt class="nav-block-icon icon-8"></dt>
+				<dd class="nav-block-title">专题报道</dd>
+			</dl>
+		</a>
+	</div>
+
+	<div class="friend-link container clearfix">
+		<div class="link-type clearfix">
+			<h6 class="link-type-item active">省市法院</h6>
+			<h6 class="link-type-item">基层法院</h6>
+		</div>
+		<ul class="link-list clearfix">
+			<foreach name="sjLinks" item="link">
+				<li class="link-item">
+					<a href="{$link['address']}">{$link['name']}</a>
+				</li>
+			</foreach>
+		</ul>
+		<ul class="link-list clearfix" style="display: none;">
+			<foreach name="jcLinks" item="link">
+				<li class="link-item">
+					<a href="{$link['address']}">{$link['name']}</a>
+				</li>
+			</foreach>
+		</ul>
+	</div>
+
+	<include file="Common/footer" />

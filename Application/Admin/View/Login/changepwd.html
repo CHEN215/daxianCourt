@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加栏目</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+
+		<form id='add_catetory' class="layui-form" style="padding: 50px 50px;">
+			<div class="layui-form-item">
+				<label class="layui-form-label">新密码：</label>
+				<div class="layui-input-block">
+					<input id='catetory' type="password" name="password" value="" placeholder="请输入新的密码" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">确认密码：</label>
+				<div class="layui-input-block">
+					<input id='catetory' type="password" name="password_confirm" value="" placeholder="请再输入一次新的密码" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="*">确定</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use(['form', 'jquery', 'layedit', 'laydate'], function() {
+
+				var $ = layui.jquery,
+					form = layui.form(),
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+
+				//监听提交
+				form.on('submit(*)', function(data) {
+				     $.post('{:U("Login/changePassword")}',data.field,function(data){
+				    	if(data.success){
+				    		layer.msg('修改成功',function(){
+				    			var index = parent.layer.getFrameIndex(window.name); 
+								parent.layer.close(index);
+				    		});
+				    	}else{
+				    		layer.msg(data.msg);
+				    	}
+				     })
+					return false; // 阻止表单提交
+				});
+			});
+		</script>
+	</body>
+
+</html>
+
+

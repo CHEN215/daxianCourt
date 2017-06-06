@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="keyword" content="达川区人民法院">
+	<meta name="description" content="达川区人民法院">
+	<css href="__CSS__/reset.css" />
+	<css href="__CSS__/style.css" />
+	<title>达川区人民法院</title>
+</head>
+<body>
+	<div class="header">
+		<div class="container clearfix">
+			<h1 class="logo">
+				<a href="" title="达川区人民法院"></a>
+			</h1>
+		</div>
+	</div>
+	
+	<div class="nav">
+		<ul class="nav-list container clearfix">
+			<li class="nav-item"><a href="__ROOT__/" class="active">首页</a></li>
+			
+			<foreach name="cates" item="cate">
+					<li class="nav-item"><a href="{:U('Index/alist',array('id'=>$cate['id']))}">{$cate['name']}</a></li>
+			</foreach>
+			
+		</ul>
+	</div>

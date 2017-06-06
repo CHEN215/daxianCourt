@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加用户</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+
+		<form class="layui-form" style="padding: 50px 50px;">
+			<div class="layui-form-item">
+				<label class="layui-form-label">用户名：</label>
+				<div class="layui-input-block">
+					<input type="text" name="username" value="" placeholder="请输入用户名" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门：</label>
+				<div class="layui-input-block">
+					<input type="text" name="department" value="" placeholder="请输入部门" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">密码：</label>
+				<div class="layui-input-block">
+					<input type="password" name="password" value="" placeholder="请输入密码" autocomplete="off" class="layui-input" id='pwd' lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">确认密码：</label>
+				<div class="layui-input-block">
+					<input type="password" name="password_confirm" value="" placeholder="再次输入密码" autocomplete="off" class="layui-input" lay-verify="password_confirm">
+				</div>
+			</div>
+			
+			<div  class="layui-form-item">
+			    <label class="layui-form-label">所属角色：</label>
+			    <div class="layui-input-block">
+					<select id='parent_catetory' name="role" lay-filter="role" lay-verify="required">
+						<option value="">请选择所属角色</option>
+						<option value="领导">领导</option>
+						<option value="频道管理员">频道管理员</option>
+					</select>
+			    </div>
+			</div>
+			
+			<div id="cate" class="layui-form-item" style="display:none;">
+				<label class="layui-form-label">栏目权限：</label>
+				<div class="layui-input-block">
+				    <foreach name="powers" item="power">
+						<input type="checkbox" name="power[{$key}]" value="{$power['id']}" title="{$power['name']}">
+				    </foreach>
+					
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="*">确定</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use(['form', 'jquery', 'layedit', 'laydate'], function() {
+
+				var $ = layui.jquery,
+					form = layui.form(),
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+
+				//自定义验证规则
+				form.verify({
+					// 确认密码一致
+					password_confirm: function(value) {
+						var pwd = $("#pwd").val(); // 获取密码
+						if(!new RegExp(pwd).test(value)) {
+							return '两次输入的密码不一致';
+						}
+					}
+				});
+				form.on('select(role)', function(data){
+					if(data.value=='领导'){
+						$('#cate').hide();
+					}
+					if(data.value=='频道管理员'){
+						$('#cate').show();
+					}
+				});
+				//监听提交
+				form.on('submit(*)', function(data) {
+					$.post('{:U("User/add",array("ajax"=>1))}',data.field,function(result){
+						if(result.success){
+							layer.msg('添加成功！',function(){
+								// 获取iframe弹窗并关闭
+								var index = parent.layer.getFrameIndex(window.name); 
+								parent.layer.close(index);
+								//parent.location.reload();
+							});
+						}else{
+							layer.msg(result.msg);
+						}
+					});
+					return false; // 阻止表单提交
+				});
+			});
+		</script>
+	</body>
+
+</html>
+
+

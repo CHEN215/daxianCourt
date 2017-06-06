@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>达州市统计信息网</title>
+	<link rel="stylesheet" href="__CSS__/reset.css">
+    <link rel="stylesheet" href="__CSS__/style.css">
+</head>
+
+<body>
+	<!--[if lt IE 7]>
+        <p class="browsehappy">您正在使用<strong>过时的</strong>浏览器。请<a href="http://browsehappy.com/">升级浏览器</a>以保证正常浏览！</p>
+    <![endif]-->
+    
+    <div class="site-bg"><img src="__IMAGE__/bg.jpg" alt=""></div>
+    
+    <!-- HEADER -->
+    <div class="header">
+        <div class="container clearfix">
+			<h1 class="logo"><a href="#"><img src="__IMAGE__/logo.png" alt="达州市统计信息网"></a></h1>
+			<p class="tip-link"><a href="">旧网链接</a> | <a href="">在线统计</a></p>
+			<ul class="nav clearfix">
+				<li class="nav-item"><a href="{:U('Index/index')}">首页</a></li>
+				<foreach name="navs" item="nav">
+					<li class="nav-item">
+						<a href="{:U('Index/alist',array('id'=>$nav['id']))}">{$nav['name']}</a>
+					</li>
+				</foreach>
+				
+			</ul>
+        </div>
+    </div> <!-- .header -->
+
+   <div class="info-container">
+		<div class="container clearfix">
+			
+			<div class="info-aside">
+				{:W('Cate/left')}
+				
+				
+			</div>
+			<div class="info-content">
+				<dl class="news-container">
+					<dt class="news-type">达州市统计局 &gt;&gt; {$checked['name']}</dt>
+					<dd>
+						<ul class="news-list">
+							
+							<foreach name="articles" item="article">
+								<li class="news-item clearfix">
+									<p class="news-title text_overflow"><a href="{:U('Index/article',array('id'=>$article['id']))}" target="_blank">
+										{$article['title']}
+									</a></p>
+									<p class="news-time">{:date('Y-m-d',$article['time'])}</p>
+								</li>
+							</foreach>
+							
+							
+						</ul>
+						<div class="page clearfix">
+							{$page}
+							
+						</div>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+
+    <div class="footer" style="position: static;">
+    	<p>主办：达州市统计局 维护：达州市统计局网络中心 技术支持：深圳市千合科技有限公司 </p>
+		<p>地址：中国四川达州市永兴路2号市政中心9楼 电话：0818-2181832 邮政编码：635000 管理ICP备案编号：蜀ICP备09020326 </p>
+    </div>
+
+	<script src="__JS__/jquery-1.8.3.min.js"></script>
+    <script>
+    	$(function(){
+			// 幻灯片
+			$.fn.bannerPlayer = function(){
+				var _this = $(this);
+				var _itemNum = $('.banner-container .news-list li').length; // 轮播数
+				var _index = _itemNum; // 初始项
+				var _time = 3000; // 切换间隔
+				var move = function(){				
+					if (_index == _itemNum*2+1) {
+						_this.find('.news-list').css({
+							"left" : '-' + (640 *_itemNum) + "px"
+						});
+						_index = _itemNum+1; 
+					}
+					if (_index == _itemNum-2){
+						_this.find('.news-list').css({
+							"left" : "-" + 640 * (_itemNum*2-1) + "px"
+						});
+						_index = _itemNum*2-2;
+					}
+					_this.find('.news-list').stop().animate({
+						"left" : "-" + _index * 640 + "px"
+					},600);
+				}; 
+
+				_this.find('.news-list').html(
+					_this.find('.news-list').html() 
+					+ _this.find('.news-list').html()
+					+ _this.find('.news-list').html()
+				).css({
+					"left" : "-" + 640 * _itemNum + "px"
+				});
+
+				var palyerTimer = setInterval(function(){
+					_index += 1;
+					move();
+				},_time);
+
+				_this.hover(function(){
+					clearInterval(palyerTimer);
+				},function(){
+					palyerTimer = setInterval(function(){
+						_index += 1;
+						move();
+					},_time);
+				});
+
+				$('.prev-btn').click(function(){
+					_index--;
+					move();
+				});
+				
+				$('.next-btn').click(function(){
+					_index++;
+					move();
+				});
+			};
+			$('.banner-container').bannerPlayer();
+
+		});
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<meta charset="UTF-8">
+	{:W('Common/header')}
+
+
+	<div class="category-container">
+		<div class="container clearfix">
+			<dl class="category clearfix">
+				<dt class="category-title">所在位置：</dt>
+				<dd class="category-list clearfix">
+					<a href="__ROOT__/">达川区人民法院&nbsp;&nbsp;&gt;&gt;</a>
+					<a href="{:U('Index/alist',array('id'=>$topcate['id']))}">{$topcate['name']}&nbsp;&nbsp;&gt;&gt;</a>
+					<foreach name="subcate" item="cate">
+						<if condition="$cate['id'] eq $checked['id']">
+							<a href="{:U('Index/alist',array('id'=>$cate['id']))}" class="active">{$cate['name']}</a>
+						<else/>
+							<a href="{:U('Index/alist',array('id'=>$cate['id']))}">{$cate['name']}</a>
+						</if>
+					</foreach>
+				</dd>
+			</dl>
+		</div>
+	</div>
+
+	<div class="container clearfix">
+		<div class="info-container">
+			<div class="container clearfix">
+				<div class="container">
+					<div class="article-container">
+						<h2 class="article-title">
+							{$article['title']}
+						</h2>
+						<p class='article-info'>
+							更新时间：{:date('Y-m-d H:i:s',$article['time'])}   作者：{$article['author']} 来源：{$article['origin']}
+						</p>
+						<div class="article-content">
+							{$article['comment']}
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<include file="Common/footer" />

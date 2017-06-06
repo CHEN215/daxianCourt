@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>数据表</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+	<script type="text/javascript" src="__JS__/function.js"></script>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;"  data-id='' class="layui-btn layui-btn-small" id="dataexport">
+					<i class="layui-icon">&#xe630;</i> 立即备份
+				</a>
+				<a href="javascript:;"  data-id='' class="layui-btn layui-btn-small" id="optimize">
+					<i class="layui-icon">&#xe639;</i> 优化表
+				</a>
+				<a href="javascript:;"  data-id='' class="layui-btn layui-btn-small" id="repair">
+					<i class="layui-icon">&#xe631;</i>修复表
+				</a>
+			</blockquote>
+
+			<fieldset class="layui-elem-field">
+				<legend>数据表</legend>
+				<div class="layui-field-box">
+					<div class="layui-form">
+						<table class="site-table table-hover">
+							<thead>
+								<tr>
+									<th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+									<th>表名</th>
+									<th>数据量</th>
+									<th>数据大小</th>
+									<th>创建时间</th>
+								</tr>
+							</thead>
+							<tbody>
+							    <foreach name="tables" item="table">
+									<tr>
+										<td>
+											<input type="checkbox" lay-skin="primary" lay-filter="choose" name="ck[]" value="{$table['name']}">
+										</td>
+										<td>{$table['name']}</td>
+										<td>{$table['rows']}</td>
+										<td><script type="text/javascript">format_bytes({$table['data_length']})</script></td>
+										<td>{$table['create_time']}</td>
+									</tr>
+							    </foreach>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</fieldset>
+
+		</div>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+
+			layui.use(['layer','form'], function() {
+
+				var $ = layui.jquery,
+					laypage = layui.laypage,
+					layer = parent.layer === undefined ? layui.layer : parent.layer, 
+					form = layui.form();
+
+				//全选
+				form.on('checkbox(allChoose)', function(data){
+				    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+				    child.each(function(index, item){
+				        item.checked = data.elem.checked;
+				    });
+				    form.render('checkbox');
+				});
+
+				    
+				// 添加栏目
+				$('#dataexport').on('click', function() {
+					dataexport();
+				});
+
+				//优化表
+				$('#optimize').on('click', function() {
+					url = '{:U("Backup/optimize")}';
+					progress(url);
+				});
+
+				$('#repair').on('click', function() {
+					url = '{:U("Backup/repair")}';
+					progress(url);
+				});
+
+				function gettable(){
+					var tables=[];var i,num = 0;
+					 $('.layui-form-checked').each(function(index,element){
+							i  = $(this).prev().val();
+
+							if(i!='on'){
+								tables[num++] = i;
+							}
+					 });
+					 return tables;
+				}
+
+				function progress(url){
+					
+					tables = gettable();
+					 if(tables.length<1){
+					 	layer.msg("请选择一张表！");
+					 	return;
+					 }
+					 layer.msg('处理中,请稍后...', {
+	 					icon: 16,
+	  					shade: 0.01,
+	  					time:0
+					});	
+					
+					$.post(url,{'table':tables},function(result){
+						if(result.success){
+							setTimeout(function(){
+			        			layer.closeAll('loading');
+								layer.msg(result.msg);
+			        		},2000);
+						}else{
+							layer.msg(result.msg);
+						}
+						
+					});
+				}
+
+				//数据恢复
+				function dataexport(){
+					url = '{:U("Backup/export")}';
+
+					tables = gettable();
+					 if(tables.length<1){
+					 	layer.msg("请选择一张表！");
+					 	return;
+					 }
+
+					$.post(url,{'table':tables},function(result){
+						if(result.success){
+							layer.msg('开始备份,处理中...', {
+		 						icon: 16,
+		  						shade: 0.01,
+		  						time:0
+							});
+
+				            backup(result.tab);
+						}else{		
+							layer.msg(result.msg);
+						}
+					});
+				}
+
+				function backup(tab){	    
+				    $.get(url, tab, function(data){
+				        if(data.success){
+				        	//备份成功
+				        	if(data.msg!=''){
+				        		setTimeout(function(){
+				        			layer.closeAll('loading');
+									layer.msg(data.msg);
+				        		},2000);	
+				        	}else{
+				        		backup(data.tab);
+				        	}
+				        }
+				    }, "json"); 
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

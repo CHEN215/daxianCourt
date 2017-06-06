@@ -1,0 +1,51 @@
+<meta charset="UTF-8">
+
+<div class="copyright">
+		<div class="container clearfix">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%" style="table-layout:fixed;">
+				<tbody>
+					<tr>
+						<td align="right">
+							<span class="biaoshi-wrap">
+								<span id="_ideConac">
+									<a href="http://bszs.conac.cn/sitename?method=show&id=06C8ACEC63C97ACBE053022819ACA811" target="_blank">
+										<img id="imgConac" vspace="0" hspace="0" border="0" src="__IMAGE__/red.png" data-bd-imgshare-binded="1">
+									</a>
+								</span>
+								<span id="_span_jiucuo">
+									<a href="http://114.55.181.28/errorInfo/jcInfo/d77704fc-bc2e-49ad-9d62-338407ea51b8-3304370640" target="_blank"s>
+									<img style="margin:0;border:0;cursor: pointer;" src="__IMAGE__/error.png"></a>
+								</span>
+							</span>
+						</td>
+						<td width="480">
+							opyright (c) Since 2017 by 达川区人民法院 all rights reserved. <br>
+							ICP备案编号：蜀ICP备09020326  技术支持：<a href="http://zqcool.com" target="_blank">深圳市千合科技有限公司</a><br>
+							地址：四川省达州市达县茂华街123号 电话：0818-2670140 邮政编码：635000
+						</td>
+						<td align="left">
+							<img src="__IMAGE__/qrcode.png" width="80" style="padding-left:40px;">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+	<js href="__JS__/slider.js" />
+	<script>
+		$(function(){
+
+			$('.slider-container').sliderPlayer();
+
+			$(".link-type-item").mouseenter(function(){
+				$index = $(this).index();
+				$(this).addClass('active').siblings().removeClass('active');
+				$(".link-list").eq($index).show().siblings("ul").hide();
+			})
+		});
+	</script>
+
+</body>
+</html>

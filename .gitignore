@@ -1,0 +1,8 @@
+.settings/
+.buildpath
+.project
+
+
+Data/bak/*
+Public/install.lock
+Application/Runtime/

@@ -1,0 +1,95 @@
+<include file="Backup/header"/>
+<meta charset="UTF-8">
+<body>
+    <!-- 数据恢复 -->
+	<table id="dg" class="easyui-datagrid" title="" style="width:100%;"
+			data-options="rownumbers:true,idField:'name',collapsible:true,singleSelect:true,url:'{:U('Backup/dataImport')}?ajax=1',method:'get'">
+		<thead>
+			<tr>
+				<th data-options="field:'name',resizable:false" width="20%">备份名称</th>
+				<th data-options="field:'part',align:'right',resizable:false" width="10%">卷数</th>
+				<th data-options="field:'compress',align:'right',resizable:false" width="10%">压缩</th>
+				<th data-options="field:'size',align:'right',resizable:false,formatter:format_bytes" width="10%">数据大小</th>
+				<th data-options="field:'time',resizable:false" width="20%">备份时间</th>
+				<th data-options="field:'status',resizable:false" width="10%">状态</th>
+				<th data-options="field:' ',align:'center',resizable:false,formatter:format_todo" width="20%">操作</th>
+			</tr>
+		</thead>
+	</table>
+</body>
+<script>
+function format_bytes(size,row,index)
+{
+    var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    for (var i = 0; size >= 1024 && i < 5; i++) size /= 1024;
+    return toDecimal2(size,2) + ' ' + units[i];
+}
+function format_todo(value,row,index)
+{
+    return '<span onclick="dataimport('+index+')" >恢复</span><span onclick="datadelete('+index+')">删除</span>';
+}
+function toDecimal2(x) {    
+    var f = Math.round(x*100)/100;    
+    var s = f.toString();    
+    return s;    
+}    
+var url = '';
+/*恢复备份的文件*/
+function dataimport(index){
+	$('#dg').datagrid('selectRow',index);
+	url = '{:U("Backup/import")}';
+	myimport();
+}
+function myimport(){
+	var rows = $('#dg').datagrid('getSelected');
+	var status = ".",obj;
+	var index = $('#dg').datagrid('getRowIndex',rows);
+    $.post(url,{'name':rows.name}, success,"json");
+ 
+    function success(data){
+        if(data.success){
+        	$('#dg').datagrid('updateRow',{
+        		index: index,
+        		row:{status:data.msg}
+        	});
+
+             if(data.part){
+                $.post(url, 
+                    {'name':rows.name,"part" : data.part, "start" : data.start}, 
+                    success, 
+                    "json"
+                );
+            }  else {
+               // window.onbeforeunload = function(){ return null; }
+            } 
+        } else {
+        	$.messager.alert('错误',data.msg,'error');
+
+
+        }
+    }
+
+}
+/*删除备份的文件*/
+function datadelete(index){
+	$('#dg').datagrid('selectRow',index);
+	url = '{:U("Backup/del")}';
+	progress();
+}
+
+function progress(){
+	var rows = $('#dg').datagrid('getChecked');
+	$.post(url,{'name':rows[0]['name']},function(result){
+		if(result.success){
+			//$('#dg').datagrid('uncheckAll');
+			$('#dg').datagrid('reload');
+			$.messager.alert('提示',result.msg,'info');
+		}else{
+			$.messager.alert('提示',result.msg,'info');
+		}
+		
+	});
+}
+
+</script>
+</html>

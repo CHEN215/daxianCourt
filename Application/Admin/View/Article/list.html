@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>文章列表</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<form class="layui-form" id="cate_form">
+					<div class="layui-form-item">
+						<label class="layui-form-label">所属栏目：</label>
+						<div class="layui-input-inline">
+							<select id='parent_catetory'lay-filter="seccates" name="parent_catetory" lay-verify="required">
+							    <foreach name="cates" item="cate">
+						    		<if condition="$cate['id'] eq $cid">
+						    			<option value="{$cate['id']}" selected>{$cate['name']}</option>
+						    		<else/>
+						    			<option value="{$cate['id']}">{$cate['name']}</option>
+						    		</if>
+							    </foreach>
+							</select>
+						</div>
+						
+					</div>
+				</form>
+			</blockquote>
+
+			<fieldset class="layui-elem-field">
+				<legend>文章列表</legend>
+				<div class="layui-field-box">
+					<table class="site-table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>分类</th>
+								<th>标题</th>
+								<th>作者</th>
+								<th>创建时间</th>
+								
+								<th>编辑</th>
+								<th>删除</th>
+							</tr>
+						</thead>
+						<tbody id="articles">
+						    <foreach name="articles" item="article">
+						    	<tr>
+									<td>{$key+1}</td>
+									<td>{$article['name']}</td>
+									<td>{$article['title']}</td>
+									<td>{$article['author']}</td>
+									<td>{:date('Y-m-d H:i',$article['time'])}</td>
+									
+									<td>
+										<a href="javascript:;"  data-id="{$article['id']}" class="layui-btn layui-btn-mini edit_btn">编辑</a>
+									</td>
+									<td>
+										<a href="javascript:;" data-id="{$article['id']}" class="layui-btn layui-btn-danger layui-btn-mini del_btn">删除</a>
+									</td>
+								</tr>
+						    </foreach>
+							
+							
+						</tbody>
+					</table>
+
+				</div>
+			</fieldset>
+
+			<!--  分页组件 -->
+			<div class="admin-table-page">
+				<div id="page" class="page">
+				</div>
+			</div>
+
+		</div>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+		    
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			var cid={$cid};
+			var form;
+			
+			layui.use(['icheck', 'laypage','layer'], function() {
+
+				var $ = layui.jquery,
+					laypage = layui.laypage,
+					layer = parent.layer === undefined ? layui.layer : parent.layer;
+
+				// 文章筛选表单
+				layui.use('form', function(){
+					form = layui.form();
+					
+					form.on('select(seccates)', function(data){
+						cid = data.value;
+						pid = $('#parent_catetory').val();
+						window.location.href= "{:U('Article/mylist')}?cid="+cid;
+	                    
+					});
+					
+					return false; //阻止表单提交
+				});
+				
+				// 分页组件
+				laypage({
+					cont: 'page',
+					pages: {$total}, //总页数	
+					groups: 5, //连续显示分页数
+					jump: function(obj, first) {
+						//得到了当前页，用于向服务端请求对应数据
+						var curr = obj.curr;
+						if(!first) {
+							$.get('{:U("Article/myList")}?ajax=1&cid='+cid+'&page='+curr,function(data){
+								if(data.success)
+								$('#articles').html(data.msg);
+								$('.del_btn').on('click',deletearticle);
+								$('.edit_btn').on('click',editarticle);
+							});
+						}
+					}
+				});
+
+				// 编辑文章
+				$('.edit_btn').on('click',editarticle);
+				function editarticle() {
+					var id = $(this).data('id');
+					var index =	layer.open({
+						type: 2,
+						title: '编辑文章',
+						content: '{:U("Article/edit")}?id='+id,
+						area: ['1000px', '600px'],
+						maxmin: true,
+						end:function(){location.reload()}
+					});
+				}
+
+				// 删除文章
+				$('.del_btn').on('click',deletearticle);
+				
+				function deletearticle() {
+					var id = $(this).data('id');  // 获取data-id属性的值 = id
+					layer.confirm('确定删除文章？', function(index){
+						$.ajax({
+							type: 'DELETE',
+							url: '{:U("Article/delete")}?id=' + id,
+							success: function(data){
+								if(data.success){
+									layer.msg('删除成功！',function(){
+										window.location.reload();
+									});
+								}else{
+									layer.msg('删除失败！',function(){
+										return;
+									});
+								}
+							},
+							error: function(){
+								layer.msg('删除失败！',function(){
+									return;
+								});
+							}
+						});
+					}); 
+				} 
+			});
+			
+		</script>
+	</body>
+
+</html>
