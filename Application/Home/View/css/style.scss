@@ -254,11 +254,13 @@ html,body{
 	margin-top: 35px;
 	height: 80px;
 	padding: 20px 0;
-	line-height: 2.0834em;
 	background-color: #1c6ebd;
-	text-align: center;
-	color: #bdc6e7;
-	font-size: 0.75em;
+	td{
+		font-size: 0.8em;
+		line-height: 2.2em;
+		text-align: center;
+		color: #bdc6e7;
+	}
 	a{
 		padding: 0 5px;
 		&:hover {
@@ -523,14 +525,16 @@ html,body{
 	color: #666666;
 	margin-top: 24px;
 }
-.right-nav-touch{width: 10px;
+.right-nav-touch{
+	width: 10px;
 	height:100%;
 	position: fixed;
 	right:0;
 	top:0;
 }
-.right-nav li{padding: 20px 0;
- height: 60px;
+.right-nav li{
+	padding: 20px 0;
+	height: 60px;
 }
 .right-nav li a{
 	display: inline-block;

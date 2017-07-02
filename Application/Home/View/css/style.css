@@ -228,11 +228,12 @@ html, body {
   margin-top: 35px;
   height: 80px;
   padding: 20px 0;
-  line-height: 2.0834em;
-  background-color: #1c6ebd;
-  text-align: center;
-  color: #bdc6e7;
-  font-size: 0.75em; }
+  background-color: #1c6ebd; }
+  .copyright td {
+    font-size: 0.8em;
+    line-height: 2.2em;
+    text-align: center;
+    color: #bdc6e7; }
   .copyright a {
     padding: 0 5px; }
     .copyright a:hover {
