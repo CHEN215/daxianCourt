@@ -279,6 +279,22 @@
 		</div>
 	</div>
 
+	<div class="right-navBox">
+	    <div class="right-nav-touch"></div>
+	    <div class="hand" style="opacity: 100; right: 0px;"><span>触碰右侧展开</span></div>
+	    <div class="right-nav" style="right: -78px;">
+	        <ul>
+	            <li><a class="a1" href="#" target="_blank">微信公众号</a></li>
+	            <li><a class="a2" href="http://weibo.com/u/3909710280?refer_flag=1001030102_" target="_blank">微 博</a></li>
+	            <li><a class="a3" href="#" target="_blank">邮件订阅</a></li>
+	            <li><a class="a4" href="javascript:alert('0818-2659540');" target="_blank">咨询</a></li>
+	            <li><a class="a7" href="javascript:alert('0818-2659540');" target="_blank">举报</a></li>
+	            <li><a class="a5" href="http://map.baidu.com/" target="_blank">来院导航</a></li>
+	            <li><a class="a6" href="#" target="_blank">诉讼APP</a></li>
+	        </ul>
+	    </div>
+	</div>
+
 	<script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
 	<script src="./script/slider.js"></script>
 	<script>
@@ -291,6 +307,24 @@
 				$(this).addClass('active').siblings().removeClass('active');
 				$(".link-list").eq($index).show().siblings("ul").hide();
 			})
+
+			$(".right-navBox").hover(function() {
+				$(".right-nav").stop().animate({
+					right: 0
+				});
+				$(".hand").stop().animate({
+					right: '80px',
+					opacity: 0
+				});
+			}, function() {
+				$(".right-nav").stop().animate({
+					right: '-78px'
+				});
+				$(".hand").stop().animate({
+					right: 0,
+					opacity: 1
+				});
+			});
 		});
 	</script>
 

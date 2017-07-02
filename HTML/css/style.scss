@@ -488,3 +488,66 @@ html,body{
 	max-width: 90% !important;
 	margin: 10px auto;
 }
+
+.right-nav{display: inline-block; 
+	width: 78px; 
+	height: 100%; 
+	padding-top: 80px; 
+	background:url(../img/2015qh_index_rnav_bg.png) repeat left top; 
+	position: fixed; 
+	top: 0; 
+	right: -78px; 
+	z-index:99;
+}
+.hand{
+	width: 80px; 
+	opacity:100; 
+	height: 100px; 
+	background: url(../img/zx_con20160809_10.png) no-repeat center center; 
+	font: 12px/24px "Microsoft YaHei"; 
+	color: #fff; 
+	position: fixed; 
+	right: 0; 
+	top: 40%; 
+	cursor: pointer; 
+	z-index: 99; 
+	vertical-align: middle; 
+	text-align: center;
+}
+.hand span{display: inline-block;
+	width: 80px;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	font: 12px/24px "Microsoft YaHei";
+	color: #666666;
+	margin-top: 24px;
+}
+.right-nav-touch{width: 10px;
+	height:100%;
+	position: fixed;
+	right:0;
+	top:0;
+}
+.right-nav li{padding: 20px 0;
+ height: 60px;
+}
+.right-nav li a{
+	display: inline-block;
+	width: 78px;
+	padding-top: 40px;
+	font: 14px/20px "Microsoft YaHei";
+	color: #fff;
+	text-align: center;
+}
+.right-nav li a:hover{
+	text-decoration:none;
+}
+.right-nav li a.a1{background:url(../img/rightnavtb20160809_06.png) no-repeat center top;}
+.right-nav li a.a2{background:url(../img/rightnavtb20160809_10.png) no-repeat center top;}
+.right-nav li a.a3{background:url(../img/rightnavtb20160809_13.png) no-repeat center top;}
+.right-nav li a.a4{background:url(../img/rightnavtb20160809_16.png) no-repeat center top;}
+.right-nav li a.a5{background:url(../img/rightnavtb20160809_19.png) no-repeat center top;}
+.right-nav li a.a6{background:url(../img/rightnavtb20160816_01.png) no-repeat center top;}
+.right-nav li a.a7{background:url(../img/rightnavtb20170113_16.png) no-repeat center top;}
+.right-nav li:hover{background:#097aca;}
