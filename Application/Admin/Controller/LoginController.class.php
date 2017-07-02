@@ -43,6 +43,7 @@ class LoginController extends Controller{
 	            $this->redirect('Index/index');
 	        }
 	    }
+
 	    $this->username = $data['username'];
 	    $this->password = $password;
 		$this->display('login');

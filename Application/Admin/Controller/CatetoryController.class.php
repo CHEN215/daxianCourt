@@ -61,6 +61,12 @@ class CatetoryController extends CommonController {
     
     public function delete(){
         $id = I('get.id',0,'intval');
+        $child = M('Cate')->where(array('pid'=>$id))->find();
+        $this->result->msg = '删除失败！';
+        if (!empty($child)){
+            $this->result->msg .= '该栏目下还有子栏目';
+            $this->ajaxReturn($this->result);
+        }
         $_rel = M('Cate')->delete($id);
         if($_rel > 0){
             $this->result->success = true;
