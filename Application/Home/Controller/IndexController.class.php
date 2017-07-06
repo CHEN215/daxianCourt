@@ -15,8 +15,9 @@ class IndexController extends Controller
         $this->jcLinks = M('Link')->field(array('name','address'))->where(array('type'=>2))->select();
         //法院新闻
         $this->newsName = M('Cate')->field(array('name'))->where(array('id'=>68))->find();
-        $news = M('News')->field(array('id','title','time','comment'))->where(array('c_id'=>68))->limit(5)->order('time desc')->select();
-        $this->onenews = array_shift($news); 
+        $news = M('News')->field(array('id','title','time','comment'))->where(array('top'=>1))->limit(4)->order('time desc')->select();
+        $this->onenews = M('News')->field(array('id','title','comment'))->where(array('hot'=>1))->find();
+        $this->onenews || $this->onenews = M('News')->field(array('id','title','comment'))->where(array('c_id'=>68))->order('time desc')->find();
         $this->news = $news;
         $this->display();
     }

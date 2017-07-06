@@ -8,11 +8,15 @@
 		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="__CSS__/global.css" media="all">
 		<link rel="stylesheet" href="__CSS__/table.css" />
+
+		<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.min.js"> </script>
+		<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+
 	</head>
 
 	<body>
-
-		<form class="layui-form layui-form-pane" style="padding: 30px 50px;">
+		<form class="layui-form" style="padding: 30px 50px;">
 			<input type="hidden" name="article_id" value="{$article['id']}">
 			<div class="layui-form-item">
 				<label class="layui-form-label">文章标题：</label>
@@ -57,6 +61,21 @@
 					</if>
 				</div>
 			</div>
+			<div class="layui-form-item" >
+				<label class="layui-form-label">标签：</label>
+				<if condition="$article['hot'] eq '1'">
+					<input type="checkbox" name="hot" value="1" title="头条" checked/>
+				<else/>
+					<input type="checkbox" name="hot" value="1" title="头条"/>
+				</if>
+				<if condition="$article['top'] eq '1'">
+					<input type="checkbox" name="top" value="1" title="置顶" checked>
+				<else/>
+					<input type="checkbox" name="top" value="1" title="置顶">
+				</if>
+
+			</div>
+			<!--
 			<if condition="$show eq 'show'">
 				<div class="layui-form-item">
 					<label class="layui-form-label">外网显示：</label>
@@ -67,14 +86,15 @@
 							 	<input type="checkbox" name="showOutNet" title="发布" >
 							 </if>
 						</div>
-					
+
 				</div>
 			</if>
-			<div class="layui-form-item">
-				<textarea id="article_content" name="content" style="display: none;" lay-verify="content">
-					{$article['comment']} 
-				</textarea>
+			-->
+
+			<div class="layui-form-item" >
+				<textarea id="editor" type="text/plain"  name="content" style="height:200px;">{$article['comment']}</textarea>
 			</div>
+
 			<div class="layui-form-item">
 				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit lay-filter="*">保存</button>
@@ -86,26 +106,17 @@
 
 		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
 		<script>
+            var ue = UE.getEditor('editor',{zIndex:900});
+
 			layui.config({
 				base: '__PLUGINS__/layui/modules/'
 			});
 
-			layui.use(['form', 'layedit', 'laydate','upload'], function() {
+			layui.use(['form', 'laydate','upload'], function() {
 				var form = layui.form(),
 					layer = layui.layer,
 					$ = layui.jquery ,
-					layedit = layui.layedit,
 					laydate = layui.laydate;
-				   
-
-				layedit.set({
-					  uploadImage: {
-					    url: '{:U("Article/editimage")}', //接口url
-					    type: 'post' //默认post
-					  }
-					});
-				//创建一个富文本编辑器
-				var editIndex = layedit.build('article_content');
 
 				//自定义验证规则
 				form.verify({

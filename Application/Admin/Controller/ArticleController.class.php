@@ -39,6 +39,8 @@ class ArticleController extends CommonController {
             $data['imgsrc'] = I('post.thumb_src','','trim');
             $data['comment'] = I('post.content','','trim');
             $data['leader_id'] = I('post.leader',0,'intval');
+            $data['hot'] = I('post.hot',0,'intval');
+            $data['top'] = I('post.top',0,'intval');
             $data['time'] = time();
             if($data['c_id']==0||$data['author']==''||$data['comment']==''||$data['title']==''){
                 $this->result->msg = "请填写完整！";
@@ -105,6 +107,8 @@ class ArticleController extends CommonController {
             $data['c_id'] = I('post.catetory',0,'intval');
             $data['author'] = I('post.author','','trim');
             $data['origin'] = I('post.origin','','trim');
+            $data['hot'] = I('post.hot',0,'intval');
+            $data['top'] = I('post.top',0,'intval');
             
             if(I('post.showOutNet','','trim')=='on'){
                 $data['outside'] = 1;
