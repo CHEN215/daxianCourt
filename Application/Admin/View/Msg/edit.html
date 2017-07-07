@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑栏目</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+
+		<form class="layui-form" style="padding: 50px 50px;">
+			<div class="layui-form-item">
+				<label class="layui-form-label">栏目名称：</label>
+				<div class="layui-input-block">
+					<input type="text" name="catetory" value="{$nowCate['name']}" placeholder="请输入栏目名称" autocomplete="off" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<input type="hidden" name="catetory_id" value="{$nowCate['id']}">
+			<div class="layui-form-item">
+			    <label class="layui-form-label">所属栏目：</label>
+			    <div class="layui-input-block">
+					<select name="parent_catetory" lay-verify="required">
+						<foreach name="cates" item="cate">
+						    <if condition="$cate['id'] eq $nowCate['pid']">
+								<option value="{$cate['id']}" selected="selected">{$cate['name']}</option>
+							<else/>
+							   <option value="{$cate['id']}">{$cate['name']}</option>
+							</if>
+						</foreach>
+					</select>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="*">确定</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use(['form', 'jquery', 'layedit', 'laydate'], function() {
+
+				var $ = layui.jquery,
+					form = layui.form(),
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+
+				//监听提交
+				form.on('submit(*)', function(data) {
+						$.post('{:U("Catetory/edit",array("ajax"=>1))}',data.field,function(result){
+							if(result.success){
+								layer.msg('修改成功！',function(){
+									// 获取iframe弹窗并关闭
+									var index = parent.layer.getFrameIndex(window.name); 
+									parent.layer.close(index);
+								});
+							}else{
+								layer.msg(result.msg);
+							}
+						});
+					return false; // 阻止表单提交
+				});
+			});
+		</script>
+
+	</body>
+
+</html>
+
+

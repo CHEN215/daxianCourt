@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>院长信箱</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <form method="post" action="{:U('Index/msgbox')}">
+                <div class="form-group col-sm-6">
+                    <label for="exampleInputEmail1">姓名</label>
+                    <input name="name" type="text" class="form-control" id="exampleInputEmail1" value="{$data['name']}" required>
+                    <p class=" text-danger">{$error['name']}</p>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="exampleInputEmail1">电子邮件</label>
+                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" value="{$data['email']}" required>
+                    <p class="text-danger">{$error['email']}</p>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="exampleInputPassword1">电话</label>
+                    <input name="phone" type="number" class="form-control" id="exampleInputPassword1" value="{$data['phone']}" placeholder="手机号码" required>
+                    <p class="text-danger">{$error['phone']}</p>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="col-sm-6">
+                        <label for="exampleInputPassword1">验证码</label>
+                        <input name="code" type="number" class="form-control" id="exampleInputPassword1" required>
+                        <p class="text-danger">{$error['code']}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <img src="{:U('Index/getCode')}" alt="" onclick="this.src = this.src + '?';">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12">
+                    <textarea name="comment" class="form-control" rows="3" required>
+                       {$data['comment']}
+                    </textarea>
+                    <p class="text-danger">{$error['comment']}</p>
+                    <button type="submit" class="btn btn-default">发送</button>
+                    <input type="reset" class="btn btn-default" value="重置">
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-8 col-xs-offset-2">
+            <foreach name="msgs" item="msg">
+                <table class="table table-bordered table-condensed table-striped">
+                    <tbody>
+                    <tr>
+                        <th>您的姓名:</th>
+                        <td>{$msg['name']}</td>
+                        <th>提交时间:</th>
+                        <td>{:date('Y-m-d H:i:s',$msg['time'])}</td>
+                    </tr>
+                    <tr>
+                        <th>电子邮件:</th>
+                        <td>{$msg['email']}</td>
+                        <th>联系电话:</th>
+                        <td>{$msg['phone']}</td>
+                    </tr>
+                    <tr>
+                        <th>内容:</th>
+                        <td colspan="3">{$msg['comment']}</td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <th>回复人:</th>
+                        <td>{$msg['rname']}</td>
+                        <th>回复时间:</th>
+                        <td><php>if($msg['rtime']){echo date('Y-m-d H:i:s',$msg['rtime']);}</php></td>
+                    </tr>
+                    <tr>
+                        <th>内容:</th>
+                        <td colspan="3">{$msg['rcomment']}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </foreach>
+            <div >{$page}</div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

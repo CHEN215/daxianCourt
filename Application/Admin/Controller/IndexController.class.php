@@ -50,6 +50,12 @@ class IndexController extends CommonController
                         )
                 ),
                 array(
+                    "title" => "留言管理",
+                    "icon" => "&#xe63a;",
+                    "href" => U('Msg/myList'),
+                    "spread" => false
+                ),
+                array(
                     "title" => "友情链接",
                     "href" => U("Friendlink/myList",array(),true,true),
                     "icon" => "&#xe64c;",

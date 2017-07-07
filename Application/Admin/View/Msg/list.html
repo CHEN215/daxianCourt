@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>栏目管理</title>
+		<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PLUGINS__/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__CSS__/global.css" media="all">
+		<link rel="stylesheet" href="__CSS__/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<fieldset class="layui-elem-field">
+				<legend>留言列表</legend>
+				<div class="layui-field-box">
+					<table class="site-table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>姓名</th>
+								<th>留言内容</th>
+								<th>留言时间</th>
+								<th>联系方式</th>
+								<th>回复人</th>
+								<th>回复内容</th>
+								<th>回复时间</th>
+								<th>回复</th>
+								<th>删除</th>
+							</tr>
+						</thead>
+						<tbody id="msglist">
+						    <foreach name="msgs" item="msg">
+								<tr>
+									<td>{++$key}</td>
+									<td>{$msg['name']}</td>
+									<td>{$msg['comment']}</td>
+									<td>{:date('Y-m-d H:i:s',$msg['time'])}</td>
+									<td>邮箱：{$msg['email']}<br/>手机：{$msg['phone']}</td>
+									<td>{$msg['rname']}</td>
+									<td>{$msg['rcomment']}</td>
+									<td>{$msg['rtime']}</td>
+									<td>
+										<if condition="$msg['status']">
+											<span><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe618;</i></span>
+										<else/>
+											<a href="javascript:;"  data-id="{$msg['id']}" class="layui-btn layui-btn-mini edit_btn">回复</a>
+										</if>
+									</td>
+									<td>
+										<a href="javascript:;" data-id="{$msg['id']}" class="layui-btn layui-btn-danger layui-btn-mini del_btn">删除</a>
+									</td>
+								</tr>
+						    </foreach>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+			<div class="admin-table-page">
+				<div id="page" class="page">
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="__PLUGINS__/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '__PLUGINS__/layui/modules/'
+			});
+
+			layui.use(['layer','laypage'], function() {
+
+				var $ = layui.jquery,
+					laypage = layui.laypage,
+					layer = parent.layer === undefined ? layui.layer : parent.layer;
+
+                // 分页组件
+                laypage({
+                    cont: 'page',
+                    pages: {$count}, //总页数
+                    groups: 5, //连续显示分页数
+                    jump: function(obj, first) {
+                        //得到了当前页，用于向服务端请求对应数据
+                        var curr = obj.curr;
+                        if(!first) {
+                            $.get('{:U("Msg/myList")}?ajax=1&&page='+curr,function(data){
+                                if(data.success)
+                                    $('#msglist').html(data.msg);
+                                $('.del_btn').on('click',deleteaction);
+                                $('.edit_btn').on('click',reply);
+                            });
+                        }
+                    }
+                });
+
+                function deleteaction() {
+                    var id = $(this).data('id');  // 获取data-id属性的值 = 栏目id
+                    layer.confirm('确定删除删除？', function(index){
+                        // do something
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '{:U("Msg/delete")}?id=' + id,
+                            success: function(result){
+                                if(result.success){
+                                    layer.msg('删除成功！',function(){
+                                        window.location.reload();
+                                    });
+                                }else{
+                                    layer.msg(result.msg,function(){
+                                        return;
+                                    });
+                                }
+                            },
+                            error: function(){
+                                layer.msg('删除失败！',function(){
+                                    return;
+                                });
+                            }
+                        });
+                    });
+
+                }
+                function reply() {
+                    var id = $(this).data('id');
+                    var index =	layer.open({
+                        type: 2,
+                        title: '回复留言',
+                        content: '{:U("Msg/reply")}?id='+id,
+                        area: ['600px', '500px'],
+                        maxmin: true,
+                        end:function(){location.reload()}
+                    });
+                }
+				// 添加栏目
+				$('.edit_btn').on('click', reply);
+
+
+				// 删除栏目
+                $('.del_btn').on('click', deleteaction);
+
+			});
+		</script>
+	</body>
+
+</html>

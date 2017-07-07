@@ -24,6 +24,8 @@
 			<foreach name="cates" item="cate">
 					<li class="nav-item"><a href="{:U('Index/alist',array('id'=>$cate['id']))}">{$cate['name']}</a></li>
 			</foreach>
+
+			<li class="nav-item"><a href="{:U('Index/msgbox')}" class="active">院长信箱</a></li>
 			
 		</ul>
 	</div>

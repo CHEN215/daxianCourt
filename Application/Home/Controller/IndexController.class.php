@@ -98,8 +98,7 @@ class IndexController extends Controller
         $keyword = I('get.keywork','','trim');
         
         $this->cates = M('Cate')->field(array('pid','id','name'))->where(array('pid'=>0))->select(); 
-       // $this->checked = $checked;
-        
+        // $this->checked = $checked;
         //文章列表
         $NewsModel = M('News'); // 实例化User对象
         $count  = $NewsModel->where(array('title'=>array('like','%'.$keyword.'%')))->count();// 查询满足要求的总记录数
@@ -110,5 +109,70 @@ class IndexController extends Controller
         $this->assign('page',$show);// 赋值分页输出
         
         $this->display('alist');
+    }
+    public function msgbox(){
+        if (!IS_POST) {
+            $Msg = M('Comments c'); // 实例化User对象
+            $count  = $Msg->where('type=0')->count();// 查询满足要求的总记录数
+            $Page   = new \Think\Page($count,2);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+            $this->page  = $Page->show();// 分页显示输出// 进行分页数据查询 注意limit方法的参数要使用Page类的属性
+            $msgs = $Msg->join('__COMMENTS__  r on r.pid = c.id','left')->field('c.*,r.name as rname,r.time as rtime,r.comment as rcomment')->where('c.type=0')->order('time desc')->limit($Page->firstRow.','.$Page->listRows)->select();
+            $this->msgs = $msgs;
+            //var_dump($this->msgs);exit;
+            $this->display(); // 输出模板
+        } else {
+            $send = true;
+            $data = $error =  array();
+            $code = I('post.code',0,'intval');
+            $data['time'] = time();
+            $data['name'] = I('post.name','','trim');
+            $data['comment'] = I('post.comment','','trim');
+            $data['email'] = I('post.email','','trim');
+            $data['phone'] = I('post.phone','','trim,intval');
+            $verify = new \Think\Verify();
+//        if(!$verify->check($code)){
+//            $error['code'] = "验证码错误";
+//            $send = false;
+//        }
+            if($data['name'] == ''){
+                $error['name'] = '姓名不能为空';
+                $send = false;
+            }
+            if($data['comment'] == ''){
+                $error['comment'] = '留言不能为空';
+                $send = false;
+            }
+            if(!strpos($data['email'],'@') || !strpos($data['email'],'.com')){
+                $error['email'] = '邮件地址不正确';
+                $send = false;
+            }
+            if ($data['phone'] == '') {
+                $error['phone'] = '手机号码格式错误';
+                $send = false;
+            }
+            if($send){
+                if(M('Comments')->add($data)){
+                    ob_clean();
+                    $this->redirect('Index/msgbox');
+                }else{
+                    $error['name'] = '添加失败';
+                }
+            }else{
+                $this->data = $data;
+                $this->error = $error;
+                $this->display('msgbox');
+            }
+        }
+    }
+    public function getCode()
+    {
+        ob_clean();
+        $config = array(
+            'length' => 4,     // 验证码位数
+            'useNoise' => false, // 关闭验证码杂点
+            'codeSet' => '987654321'
+        );
+        $Verify = new \Think\Verify($config);
+        $Verify->entry();
     }
 }
