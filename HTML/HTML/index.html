@@ -28,6 +28,12 @@
 			<li class="nav-item"><a href="">法律法规</a></li>
 			<li class="nav-item">
 				<a href="">便民服务</a>
+				<ul class="subnav-list">
+					<li class="subnav-item"><a href="">法律法规</a></li>
+					<li class="subnav-item"><a href="">法律法规</a></li>
+					<li class="subnav-item"><a href="">法律法规</a></li>
+					<li class="subnav-item"><a href="">法律法规</a></li>
+				</ul>
 			</li>
 		</ul>
 	</div>
@@ -286,7 +292,7 @@
 	    <div class="hand" style="opacity: 100; right: 0px;"><span>触碰右侧展开</span></div>
 	    <div class="right-nav" style="right: -78px;">
 	        <ul>
-	            <li><a class="a1" href="#" target="_blank">微信公众号</a></li>
+	            <li><a class="a1 wecat-btn" href="javascript:;" target="_blank">微信公众号</a></li>
 	            <li><a class="a2" href="http://weibo.com/u/3909710280?refer_flag=1001030102_" target="_blank">微 博</a></li>
 	            <li><a class="a3" href="#" target="_blank">邮件订阅</a></li>
 	            <li><a class="a4" href="javascript:alert('0818-2659540');" target="_blank">咨询</a></li>
@@ -298,6 +304,7 @@
 	</div>
 
 	<script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+	<script src="./script/layer/layer.js"></script>
 	<script src="./script/slider.js"></script>
 	<script>
 		$(function(){
@@ -308,6 +315,13 @@
 				$index = $(this).index();
 				$(this).addClass('active').siblings().removeClass('active');
 				$(".link-list").eq($index).show().siblings("ul").hide();
+			})
+			
+			$(".nav-item").hover(function() {
+
+				$(this).find('.subnav-list').stop().slideDown(300);
+			},function() {
+				$(this).find('.subnav-list').stop().slideUp(300);
 			})
 
 			$(".right-navBox").hover(function() {
@@ -327,6 +341,18 @@
 					opacity: 1
 				});
 			});
+
+			$(".wecat-btn").click(function() {
+			layer.open({
+				type: 1,
+				title:  ["扫描二维码，关注微信公众号！"],
+				closeBtn: 1,
+				shade: [0.95, '#000000'],
+				area: ['270px', '300px'],
+				shadeClose: true,
+				content: '<img src="./img/qrcode.png" width="250" height="250" />'
+			});
+		});
 		});
 	</script>
 

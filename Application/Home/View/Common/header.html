@@ -22,10 +22,19 @@
 			<li class="nav-item"><a href="__ROOT__/" class="active">首页</a></li>
 			
 			<foreach name="cates" item="cate">
-					<li class="nav-item"><a href="{:U('Index/alist',array('id'=>$cate['id']))}">{$cate['name']}</a></li>
+					<li class="nav-item">
+						<a href="{:U('Index/alist',array('id'=>$cate['id']))}">{$cate['name']}</a>
+						<if condition="$cate['child']" >
+							<ul class="subnav-list">
+								<foreach name="cate['child']" item="v" >
+									<li class="subnav-item"><a href="{:U('Index/alist',array('id'=>$v['id']))}">{$v['name']}</a></li>
+								</foreach>
+							</ul>
+						</if>
+					</li>
 			</foreach>
 
-			<li class="nav-item"><a href="{:U('Index/msgbox')}" class="active">院长信箱</a></li>
-			
+			<!--<li class="nav-item"><a href="{:U('Index/msgbox')}" class="active">院长信箱</a></li>-->
+			<!---->
 		</ul>
 	</div>

@@ -61,7 +61,7 @@ class IndexController extends Controller
         
         $article = M('News')->find($id);
         $this->checked = $checked = M('Cate')->field(array('pid','id','name'))->find($article['c_id']);
-       // $this->cates = M('Cate')->field(array('pid','id','name'))->where(array('pid'=>0))->select();
+        //$this->cates = M('Cate')->field(array('pid','id','name'))->where(array('pid'=>0))->select();
       //  $this->subcates = M('Cate')->field(array('pid','id','name'))->where(array('pid'=>$checked['pid']))->select();
         if ($checked['pid'] == 0)
         {
@@ -130,10 +130,10 @@ class IndexController extends Controller
             $data['email'] = I('post.email','','trim');
             $data['phone'] = I('post.phone','','trim,intval');
             $verify = new \Think\Verify();
-//        if(!$verify->check($code)){
-//            $error['code'] = "验证码错误";
-//            $send = false;
-//        }
+            if (!$verify->check($code)) {
+                $error['code'] = "验证码错误";
+                $send = false;
+            }
             if($data['name'] == ''){
                 $error['name'] = '姓名不能为空';
                 $send = false;

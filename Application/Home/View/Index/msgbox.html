@@ -1,3 +1,5 @@
+<meta charset="UTF-8">
+{:W('Common/header')}
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -16,10 +18,15 @@
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .msg-box{
+            padding: 20px 0;
+        }
+    </style>
 </head>
 
 <body>
-<div class="container">
+<div class="container msg-box">
     <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
             <form method="post" action="{:U('Index/msgbox')}">
@@ -105,3 +112,4 @@
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>
+<include file="Common/footer"/>

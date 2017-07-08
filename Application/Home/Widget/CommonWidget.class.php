@@ -8,7 +8,9 @@ class CommonWidget extends Controller
 
     public function header()
     {
-        $this->cates = M('Cate')->field(array('id','name'))->where(array('pid'=>0,id=>array('not in','66,67,68')))->select();     
+        $cates = M('Cate')->field(array('id','name','pid'))->where(array('id'=>array('not in','66,67,68')))->select();
+        $this->cates = arr2tree($cates);
+       // var_dump(arr2tree($this->cates));
         $this->display('Common:header');
     }
 }

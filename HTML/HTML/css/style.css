@@ -299,14 +299,6 @@ html, body {
   color: #bdc6e7;
   font-size: 0.75em;
 }
-
-.copyright td{
-  line-height: 2.0834em;
-  text-align: center;
-  color: #bdc6e7;
-  font-size: 0.75em;
-}
-
 .copyright a {
   padding: 0 5px;
 }
@@ -564,7 +556,6 @@ html, body {
   display: inline-block;
   width: 78px;
   height: 100%;
-  padding-top: 80px;
   background: url(../img/2015qh_index_rnav_bg.png) repeat left top;
   position: fixed;
   top: 0;
@@ -657,12 +648,4 @@ html, body {
   background: #097aca;
 }
 
-@media screen and (max-width: 480px) {
-  .nav,.copyright {
-    display: none;\
-  }
-  .container{
-    width: 100%;
-  }
-}
 /*# sourceMappingURL=style.css.map */
