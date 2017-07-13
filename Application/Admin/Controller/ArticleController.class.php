@@ -38,7 +38,6 @@ class ArticleController extends CommonController {
             if(I('post.isShowOutNet','','trim')) $data['outside'] = 1;
             $data['imgsrc'] = I('post.thumb_src','','trim');
             $data['comment'] = I('post.content','','trim');
-            $data['leader_id'] = I('post.leader',0,'intval');
             $data['hot'] = I('post.hot',0,'intval');
             $data['top'] = I('post.top',0,'intval');
             $data['time'] = time();
@@ -46,10 +45,6 @@ class ArticleController extends CommonController {
                 $this->result->msg = "请填写完整！";
                 $this->ajaxReturn($this->result);
                 
-            }
-            if($data['leader_id']==0){
-                $this->result->msg = "请选择审核这篇文章的领导！";
-                $this->ajaxReturn($this->result);
             }
             if(M('News')->add($data)){
                 session('thumb_src',null);
